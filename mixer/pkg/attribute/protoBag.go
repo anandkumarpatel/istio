@@ -96,6 +96,11 @@ func (s StringMap) Get(key string) (string, bool) {
 	return str, found
 }
 
+// Raw returns a stringmap value and records access
+func (s StringMap) Raw() map[string]string {
+	return s.entries
+}
+
 // Get returns an attribute value.
 func (pb *ProtoBag) Get(name string) (interface{}, bool) {
 	// find the dictionary index for the given string

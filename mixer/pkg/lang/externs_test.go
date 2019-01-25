@@ -17,6 +17,7 @@ package lang
 import (
 	"bytes"
 	"net"
+	"strings"
 	"testing"
 	"time"
 )
@@ -485,6 +486,27 @@ func TestExternEmptyStringMap(t *testing.T) {
 	m := externEmptyStringMap()
 	if len(m) != 0 {
 		t.Errorf("emptyStringMap() returned non-empty map: %#v", m)
+	}
+}
+
+func TestExternJoin(t *testing.T) {
+	testMap := map[string]string{
+		"one":   "2",
+		"three": "four",
+		"!@#$%": "^& *()",
+	}
+	delim := ","
+	m := externJoin(testMap, delim)
+	values := strings.Split(m, delim)
+	if len(values) != 3 {
+		t.Errorf("join() did not return expected string. length %d, wanted: 3: %#v", len(values), values)
+	}
+	for _, val := range values {
+		keys := strings.Split(val, ":")
+
+		if testMap[keys[0]] != keys[1] {
+			t.Errorf("join() did not return expected string. %s missing %#v", m, keys)
+		}
 	}
 }
 

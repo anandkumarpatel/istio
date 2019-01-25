@@ -48,6 +48,7 @@ var Externs = map[string]interpreter.Extern{
 	"startsWith":        interpreter.ExternFromFn("startsWith", externStartsWith),
 	"endsWith":          interpreter.ExternFromFn("endsWith", externEndsWith),
 	"emptyStringMap":    interpreter.ExternFromFn("emptyStringMap", externEmptyStringMap),
+	"join":              interpreter.ExternFromFn("join", externJoin),
 	"conditionalString": interpreter.ExternFromFn("conditionalString", externConditionalString),
 }
 
@@ -108,6 +109,11 @@ var ExternFunctionMetadata = []ast.FunctionMetadata{
 		Name:          "emptyStringMap",
 		ReturnType:    config.STRING_MAP,
 		ArgumentTypes: []config.ValueType{},
+	},
+	{
+		Name:          "join",
+		ReturnType:    config.STRING,
+		ArgumentTypes: []config.ValueType{config.STRING_MAP, config.STRING},
 	},
 	{
 		Name:          "conditionalString",
@@ -326,6 +332,16 @@ func externEndsWith(str string, suffix string) bool {
 
 func externEmptyStringMap() map[string]string {
 	return map[string]string{}
+}
+
+func externJoin(strMap map[string]string, dil string) string {
+	out := ""
+
+	for key, value := range strMap {
+		out += key + ":" + value + dil
+	}
+
+	return strings.TrimSuffix(out, dil)
 }
 
 func externConditionalString(condition bool, trueStr, falseStr string) string {

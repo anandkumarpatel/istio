@@ -19,6 +19,7 @@ import (
 	"reflect"
 	"time"
 
+	"istio.io/istio/mixer/pkg/attribute"
 	"istio.io/istio/mixer/pkg/il"
 	"istio.io/istio/pkg/log"
 )
@@ -184,10 +185,13 @@ func (e Extern) invoke(s *il.StringTable, heap []interface{}, hp *uint32, stack 
 			r := heap[stack[ap]]
 			ins[i] = reflect.ValueOf(r)
 			log.Warnf("XXX Interface %s", ins[i].Type().Name())
-			// if ins[i].Type().Name() == "StringMap" {
-			// 	a := ins[i].(attribute.StringMap)
-			// 	ins[i] = a.Raw()
-			// }
+
+			if ins[i].Type().Name() == "StringMap" {
+				log.Warn("XXX Krazy")
+				a := r.(attribute.StringMap)
+				b := a.Raw()
+				ins[i] = reflect.ValueOf(b)
+			}
 
 		default:
 			panic("interpreter.Extern.invoke: unrecognized parameter type")

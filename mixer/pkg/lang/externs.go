@@ -27,7 +27,6 @@ import (
 	"golang.org/x/net/idna"
 
 	config "istio.io/api/policy/v1beta1"
-	"istio.io/istio/mixer/pkg/attribute"
 	"istio.io/istio/mixer/pkg/il/interpreter"
 	"istio.io/istio/mixer/pkg/lang/ast"
 )
@@ -335,10 +334,11 @@ func externEmptyStringMap() map[string]string {
 	return map[string]string{}
 }
 
-func externJoin(strMap attribute.StringMap, dil string) string {
+func externJoin(strMap map[string]string, dil string) string {
 	out := ""
+	// a := strMap.(attribute.StringMap)
 
-	for key, value := range strMap.Raw() {
+	for key, value := range strMap {
 		out += key + ":" + value + dil
 	}
 

@@ -15,6 +15,7 @@
 package interpreter
 
 import (
+	"fmt"
 	"reflect"
 	"time"
 
@@ -122,11 +123,14 @@ func ilType(t reflect.Type) il.Type {
 			return il.Interface
 		}
 	case reflect.Interface:
+		fmt.Printf("XXX Name %#v\n", t.Name())
 		switch t.Name() {
 		case "StringMap":
 			return il.Interface
 		}
 	}
+
+	fmt.Printf("XXX %#v\n", t.Kind())
 
 	panic("Unmapped go type: " + t.Name() + " " + t.String() + " kind:" + t.Kind().String())
 }

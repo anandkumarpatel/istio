@@ -334,13 +334,11 @@ func externEmptyStringMap() map[string]string {
 	return map[string]string{}
 }
 
-func externJoin(strMap interface{}, dil string) string {
+func externJoin(strMap map[string]string, dil string) string {
 	out := ""
-	// tVal interface{}	switch v := tVal.(type) {
+	// a := strMap.(attribute.StringMap)
 
-	a := strMap.(map[string]string)
-
-	for key, value := range a {
+	for key, value := range strMap {
 		out += key + ":" + value + dil
 	}
 

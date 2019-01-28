@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"istio.io/istio/mixer/pkg/il"
+	"istio.io/istio/pkg/log"
 )
 
 // Extern represents an external, native function that is callable from within the interpreter,
@@ -121,6 +122,8 @@ func ilType(t reflect.Type) il.Type {
 		switch t.Name() {
 		case "Time":
 			return il.Interface
+		case "StringMap":
+			return il.Interface
 		}
 	case reflect.Interface:
 		fmt.Printf("XXX Name %#v\n", t.Name())
@@ -156,26 +159,31 @@ func (e Extern) invoke(s *il.StringTable, heap []interface{}, hp *uint32, stack 
 		case il.String:
 			str := heap[stack[ap]].(string)
 			ins[i] = reflect.ValueOf(str)
-
+			log.Warn("XXX string")
 		case il.Bool:
 			b := stack[ap] != 0
 			ins[i] = reflect.ValueOf(b)
+			log.Warn("XXX Bool")
 
 		case il.Integer:
 			iv := il.ByteCodeToInteger(stack[ap+1], stack[ap])
 			ins[i] = reflect.ValueOf(iv)
+			log.Warn("XXX Integer")
 
 		case il.Duration:
 			iv := il.ByteCodeToInteger(stack[ap+1], stack[ap])
 			ins[i] = reflect.ValueOf(time.Duration(iv))
+			log.Warn("XXX Duration")
 
 		case il.Double:
 			d := il.ByteCodeToDouble(stack[ap+1], stack[ap])
 			ins[i] = reflect.ValueOf(d)
+			log.Warn("XXX Double")
 
 		case il.Interface:
 			r := heap[stack[ap]]
 			ins[i] = reflect.ValueOf(r)
+			log.Warn("XXX Interface")
 
 		default:
 			panic("interpreter.Extern.invoke: unrecognized parameter type")

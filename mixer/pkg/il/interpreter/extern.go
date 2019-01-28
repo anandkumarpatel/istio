@@ -183,7 +183,11 @@ func (e Extern) invoke(s *il.StringTable, heap []interface{}, hp *uint32, stack 
 		case il.Interface:
 			r := heap[stack[ap]]
 			ins[i] = reflect.ValueOf(r)
-			log.Warn("XXX Interface")
+			log.Warnf("XXX Interface %s", ins[i].Type().Name())
+			// if ins[i].Type().Name() == "StringMap" {
+			// 	a := ins[i].(attribute.StringMap)
+			// 	ins[i] = a.Raw()
+			// }
 
 		default:
 			panic("interpreter.Extern.invoke: unrecognized parameter type")
